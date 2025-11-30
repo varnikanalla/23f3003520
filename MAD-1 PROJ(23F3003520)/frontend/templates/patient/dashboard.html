@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Patient Dashboard</h2>
+<p>Welcome, {{ patient.user.full_name }}!</p>
+<hr>
+<div class="row">
+    <div class="col-md-6"><div class="card"><div class="card-header bg-primary text-white"><h5>Upcoming Appointments</h5></div><div class="card-body">
+        {% if upcoming_appointments %}
+            {% for a in upcoming_appointments %}
+            <div class="mb-2"><h6>Dr. {{ a.doctor.user.full_name }}</h6><p>{{ a.appointment_date }} at {{ a.appointment_time.strftime('%H:%M') }}</p></div>
+            {% endfor %}
+            <a href="{{ url_for('patient_appointments') }}" class="btn btn-primary btn-sm">View All</a>
+        {% else %}<p class="text-muted">No appointments</p><a href="{{ url_for('patient_doctors') }}" class="btn btn-success btn-sm">Book</a>{% endif %}
+    </div></div></div>
+    <div class="col-md-6"><div class="card"><div class="card-header bg-success text-white"><h5>Departments</h5></div><div class="card-body">
+        <div class="row">
+            {% for d in departments[:6] %}
+            <div class="col-md-6 mb-2"><div class="card"><div class="card-body text-center"><h6>{{ d.name }}</h6><a href="{{ url_for('patient_doctors', department=d.id) }}" class="btn btn-sm btn-outline-primary">Doctors</a></div></div></div>
+            {% endfor %}
+        </div>
+    </div></div></div>
+</div>
+{% endblock %}

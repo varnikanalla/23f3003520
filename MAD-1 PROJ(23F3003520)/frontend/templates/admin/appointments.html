@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Appointments</h2>
+<hr>
+<div class="mb-3">
+    <a href="{{ url_for('admin_appointments', status='all') }}" class="btn btn-sm btn-outline-secondary {% if status_filter == 'all' %}active{% endif %}">All</a>
+    <a href="{{ url_for('admin_appointments', status='Booked') }}" class="btn btn-sm btn-outline-warning {% if status_filter == 'Booked' %}active{% endif %}">Booked</a>
+    <a href="{{ url_for('admin_appointments', status='Completed') }}" class="btn btn-sm btn-outline-success {% if status_filter == 'Completed' %}active{% endif %}">Completed</a>
+    <a href="{{ url_for('admin_appointments', status='Cancelled') }}" class="btn btn-sm btn-outline-danger {% if status_filter == 'Cancelled' %}active{% endif %}">Cancelled</a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr>
+                    <td>{{ a.patient.user.full_name }}</td>
+                    <td>{{ a.doctor.user.full_name }}</td>
+                    <td>{{ a.appointment_date }}</td>
+                    <td>{{ a.appointment_time.strftime('%H:%M') }}</td>
+                    <td>{{ a.reason if a.reason else '-' }}</td>
+                    <td><span class="badge bg-{{ 'success' if a.status == 'Completed' else 'warning' if a.status == 'Booked' else 'danger' }}">{{ a.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Treatment History</h2>
+<hr>
+{% if appointments %}
+<div class="accordion" id="treatmentAccordion">
+    {% for a in appointments %}
+    <div class="accordion-item">
+        <h2 class="accordion-header"><button class="accordion-button {% if not loop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ a.id }}">
+            <div><strong>{{ a.appointment_date.strftime('%B %d, %Y') }}</strong> - Dr. {{ a.doctor.user.full_name }}<br><small class="text-muted">{{ a.doctor.department.name }}</small></div>
+        </button></h2>
+        <div id="collapse{{ a.id }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}" data-bs-parent="#treatmentAccordion"><div class="accordion-body">
+            {% if a.treatment %}
+            <h6>Diagnosis</h6><p class="border-start border-primary border-4 ps-3">{{ a.treatment.diagnosis }}</p>
+            {% if a.treatment.prescription %}<h6>Prescription</h6><p class="border-start border-success border-4 ps-3">{{ a.treatment.prescription }}</p>{% endif %}
+            {% if a.treatment.notes %}<h6>Notes</h6><p class="border-start border-info border-4 ps-3">{{ a.treatment.notes }}</p>{% endif %}
+            {% if a.treatment.follow_up_date %}<div class="alert alert-warning">Follow-up: {{ a.treatment.follow_up_date.strftime('%B %d, %Y') }}</div>{% endif %}
+            {% endif %}
+        </div></div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}<div class="alert alert-info">No treatment history. <a href="{{ url_for('patient_doctors') }}">Book appointment</a></div>{% endif %}
+{% endblock %}

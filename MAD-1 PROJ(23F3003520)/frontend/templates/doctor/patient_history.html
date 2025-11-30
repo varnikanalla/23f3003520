@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Patient History</h2>
+<hr>
+<div class="card mb-3"><div class="card-body">
+    <h4>{{ patient.user.full_name }}</h4>
+    <p><strong>Email:</strong> {{ patient.user.email }} | <strong>Phone:</strong> {{ patient.user.phone }}</p>
+    <p><strong>Gender:</strong> {{ patient.gender }} | <strong>Blood:</strong> {{ patient.blood_group }}</p>
+</div></div>
+<div class="card"><div class="card-header"><h5>Treatment History</h5></div><div class="card-body">
+    {% if appointments %}
+        {% for a in appointments %}
+        <div class="card mb-3"><div class="card-body">
+            <h6>{{ a.appointment_date }} - {{ a.appointment_time.strftime('%H:%M') }}</h6>
+            {% if a.treatment %}
+            <p><strong>Diagnosis:</strong> {{ a.treatment.diagnosis }}</p>
+            <p><strong>Prescription:</strong> {{ a.treatment.prescription if a.treatment.prescription else 'None' }}</p>
+            {% endif %}
+        </div></div>
+        {% endfor %}
+    {% else %}<p class="text-muted">No history</p>{% endif %}
+</div></div>
+<a href="{{ url_for('doctor_appointments') }}" class="btn btn-secondary">Back</a>
+{% endblock %}

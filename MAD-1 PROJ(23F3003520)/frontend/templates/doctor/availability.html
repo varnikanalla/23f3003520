@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Set Availability (Next 7 Days)</h2>
+<hr>
+<div class="card"><div class="card-body">
+    <form method="POST">
+        {% for date in dates %}
+        <div class="card mb-3"><div class="card-body"><div class="row">
+            <div class="col-md-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="available_{{ date.strftime('%Y-%m-%d') }}" {% if availability_dict.get(date) %}checked{% endif %}>
+                    <label class="form-check-label"><strong>{{ date.strftime('%A, %B %d') }}</strong></label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Start Time</label>
+                <input type="time" class="form-control" name="start_time_{{ date.strftime('%Y-%m-%d') }}" value="{% if availability_dict.get(date) %}{{ availability_dict[date].start_time.strftime('%H:%M') }}{% else %}09:00{% endif %}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">End Time</label>
+                <input type="time" class="form-control" name="end_time_{{ date.strftime('%Y-%m-%d') }}" value="{% if availability_dict.get(date) %}{{ availability_dict[date].end_time.strftime('%H:%M') }}{% else %}17:00{% endif %}">
+            </div>
+        </div></div></div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Update Availability</button>
+    </form>
+</div></div>
+{% endblock %}

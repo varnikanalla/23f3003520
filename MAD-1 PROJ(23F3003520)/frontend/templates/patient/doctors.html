@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Find Doctors</h2>
+<hr>
+<div class="card mb-4"><div class="card-body">
+    <form method="GET"><div class="row">
+        <div class="col-md-5"><input type="text" class="form-control" name="search" placeholder="Search..." value="{{ search_query }}"></div>
+        <div class="col-md-5"><select class="form-select" name="department"><option value="">All Departments</option>{% for d in departments %}<option value="{{ d.id }}" {% if selected_department == d.id|string %}selected{% endif %}>{{ d.name }}</option>{% endfor %}</select></div>
+        <div class="col-md-2"><button type="submit" class="btn btn-primary w-100">Search</button></div>
+    </div></form>
+</div></div>
+<div class="row">
+    {% for d in doctors %}
+    <div class="col-md-6 mb-4"><div class="card h-100"><div class="card-body">
+        <h5>Dr. {{ d.user.full_name }}</h5>
+        <p><strong>Dept:</strong> {{ d.department.name }}</p>
+        <p><strong>Spec:</strong> {{ d.specialization }}</p>
+        <p><strong>Exp:</strong> {{ d.experience_years }} years</p>
+        <p><strong>Fee:</strong> ₹{{ d.consultation_fee }}</p>
+        <h6>Available Slots:</h6>
+        {% if doctor_availability.get(d.id) %}
+            {% for a in doctor_availability[d.id][:3] %}<span class="badge bg-info">{{ a.date.strftime('%d %b') }}</span> {% endfor %}
+        {% else %}<p class="text-muted small">No availability</p>{% endif %}
+        <a href="{{ url_for('book_appointment', doctor_id=d.id) }}" class="btn btn-success">Book</a>
+    </div></div></div>
+    {% endfor %}
+</div>
+{% if not doctors %}<div class="alert alert-info">No doctors found</div>{% endif %}
+{% endblock %}

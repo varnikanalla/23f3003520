@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-md-8"><div class="card shadow"><div class="card-body p-4">
+    <h3 class="text-center mb-4">Patient Registration</h3>
+    <form method="POST">
+        <div class="row">
+            <div class="col-md-6 mb-3"><label>Username *</label><input type="text" class="form-control" name="username" required></div>
+            <div class="col-md-6 mb-3"><label>Email *</label><input type="email" class="form-control" name="email" required></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3"><label>Password *</label><input type="password" class="form-control" name="password" required></div>
+            <div class="col-md-6 mb-3"><label>Confirm Password *</label><input type="password" class="form-control" name="confirm_password" required></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3"><label>Full Name *</label><input type="text" class="form-control" name="full_name" required></div>
+            <div class="col-md-6 mb-3"><label>Phone *</label><input type="tel" class="form-control" name="phone" required></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3"><label>DOB *</label><input type="date" class="form-control" name="dob" required></div>
+            <div class="col-md-4 mb-3"><label>Gender *</label><select class="form-select" name="gender" required><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+            <div class="col-md-4 mb-3"><label>Blood Group</label><select class="form-select" name="blood_group"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+        </div>
+        <div class="mb-3"><label>Address</label><textarea class="form-control" name="address" rows="2"></textarea></div>
+        <div class="mb-3"><label>Emergency Contact</label><input type="tel" class="form-control" name="emergency_contact"></div>
+        <button type="submit" class="btn btn-success w-100">Register</button>
+    </form>
+    <div class="text-center mt-3"><p>Have account? <a href="{{ url_for('login') }}">Login</a></p></div>
+</div></div></div></div>
+{% endblock %}

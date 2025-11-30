@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Complete Appointment</h2>
+<hr>
+<div class="card mb-3"><div class="card-body">
+    <h5>Patient: {{ appointment.patient.user.full_name }}</h5>
+    <p><strong>Date:</strong> {{ appointment.appointment_date }} | <strong>Time:</strong> {{ appointment.appointment_time.strftime('%H:%M') }}</p>
+    <p><strong>Reason:</strong> {{ appointment.reason if appointment.reason else 'Not specified' }}</p>
+</div></div>
+<div class="card"><div class="card-body">
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Diagnosis *</label>
+            <textarea class="form-control" name="diagnosis" rows="3" required {% if appointment.treatment %}disabled{% endif %}>{% if appointment.treatment %}{{ appointment.treatment.diagnosis }}{% endif %}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Prescription</label>
+            <textarea class="form-control" name="prescription" rows="4" {% if appointment.treatment %}disabled{% endif %}>{% if appointment.treatment %}{{ appointment.treatment.prescription }}{% endif %}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <textarea class="form-control" name="notes" rows="3" {% if appointment.treatment %}disabled{% endif %}>{% if appointment.treatment %}{{ appointment.treatment.notes }}{% endif %}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Follow-up Date</label>
+            <input type="date" class="form-control" name="follow_up_date" {% if appointment.treatment %}value="{{ appointment.treatment.follow_up_date }}" disabled{% endif %}>
+        </div>
+        {% if not appointment.treatment %}<button type="submit" class="btn btn-success">Complete Appointment</button>{% endif %}
+        <a href="{{ url_for('doctor_appointments') }}" class="btn btn-secondary">Back</a>
+    </form>
+</div></div>
+{% endblock %}

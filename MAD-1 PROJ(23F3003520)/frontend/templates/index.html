@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<h1>Welcome to Hospital Management System</h1>
+<p>Efficient healthcare management at your fingertips</p>
+<hr>
+
+{% if not current_user.is_authenticated %}
+    <a href="{{ url_for('login') }}"
+       style="padding:6px 12px; background:#0d6efd; color:#fff; text-decoration:none; border-radius:4px; font-size:14px; margin-right:6px;">
+        Login
+    </a>
+
+    <a href="{{ url_for('register') }}"
+       style="padding:6px 12px; background:#198754; color:#fff; text-decoration:none; border-radius:4px; font-size:14px;">
+        Register
+    </a>
+
+{% else %}
+    <a href="{{ url_for('dashboard_redirect') }}"
+       style="padding:6px 12px; background:#0d6efd; color:#fff; text-decoration:none; border-radius:4px; font-size:14px;">
+        Go to Dashboard
+    </a>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Search</h2>
+<hr>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" class="form-control" name="search_query" placeholder="Search..." value="{{ search_query }}">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" name="search_type">
+                        <option value="all">All</option>
+                        <option value="doctors">Doctors</option>
+                        <option value="patients">Patients</option>
+                        <option value="departments">Departments</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if results.doctors %}
+<div class="card mb-3">
+    <div class="card-header"><h5>Doctors ({{ results.doctors|length }})</h5></div>
+    <div class="card-body">
+        <table class="table">
+            <tr><th>Name</th><th>Department</th><th>Specialization</th></tr>
+            {% for d in results.doctors %}
+            <tr><td>{{ d.user.full_name }}</td><td>{{ d.department.name }}</td><td>{{ d.specialization }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if results.patients %}
+<div class="card mb-3">
+    <div class="card-header"><h5>Patients ({{ results.patients|length }})</h5></div>
+    <div class="card-body">
+        <table class="table">
+            <tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+            {% for p in results.patients %}
+            <tr><td>{{ p.user.full_name }}</td><td>{{ p.user.email }}</td><td>{{ p.user.phone }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if results.departments %}
+<div class="card mb-3">
+    <div class="card-header"><h5>Departments ({{ results.departments|length }})</h5></div>
+    <div class="card-body">
+        <table class="table">
+            <tr><th>Name</th><th>Description</th></tr>
+            {% for d in results.departments %}
+            <tr><td>{{ d.name }}</td><td>{{ d.description }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if search_query and not (results.doctors or results.patients or results.departments) %}
+<div class="alert alert-info">No results found</div>
+{% endif %}
+{% endblock %}

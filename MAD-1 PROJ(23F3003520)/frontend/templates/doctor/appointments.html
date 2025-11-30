@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Appointments</h2>
+<hr>
+<div class="mb-3">
+    <a href="{{ url_for('doctor_appointments', status='all') }}" class="btn btn-sm btn-outline-secondary {% if status_filter == 'all' %}active{% endif %}">All</a>
+    <a href="{{ url_for('doctor_appointments', status='Booked') }}" class="btn btn-sm btn-outline-warning {% if status_filter == 'Booked' %}active{% endif %}">Booked</a>
+    <a href="{{ url_for('doctor_appointments', status='Completed') }}" class="btn btn-sm btn-outline-success {% if status_filter == 'Completed' %}active{% endif %}">Completed</a>
+</div>
+<div class="card"><div class="card-body">
+    <table class="table">
+        <tr><th>Patient</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
+        {% for a in appointments %}
+        <tr>
+            <td><a href="{{ url_for('patient_history', patient_id=a.patient.id) }}">{{ a.patient.user.full_name }}</a></td>
+            <td>{{ a.appointment_date }}</td>
+            <td>{{ a.appointment_time.strftime('%H:%M') }}</td>
+            <td>{{ a.reason if a.reason else '-' }}</td>
+            <td><span class="badge bg-{{ 'success' if a.status == 'Completed' else 'warning' }}">{{ a.status }}</span></td>
+            <td>
+                {% if a.status == 'Booked' %}
+                <a href="{{ url_for('complete_appointment', appointment_id=a.id) }}" class="btn btn-sm btn-success">Complete</a>
+                <form method="POST" action="{{ url_for('doctor_cancel_appointment', appointment_id=a.id) }}" style="display:inline">
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('Cancel')">Cancel</button>
+                </form>
+                {% elif a.status == 'Completed' %}
+                <a href="{{ url_for('complete_appointment', appointment_id=a.id) }}" class="btn btn-sm btn-info">View</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div></div>
+{% endblock %}

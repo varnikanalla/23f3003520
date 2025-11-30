@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Doctor Dashboard</h2>
+<p>Welcome, Dr. {{ doctor.user.full_name }}</p>
+<hr>
+<div class="row mb-4">
+    <div class="col-md-4"><div class="card text-white bg-info"><div class="card-body"><h5>Upcoming</h5><h2>{{ upcoming_appointments|length }}</h2></div></div></div>
+    <div class="col-md-4"><div class="card text-white bg-primary"><div class="card-body"><h5>Today</h5><h2>{{ today_appointments|length }}</h2></div></div></div>
+    <div class="col-md-4"><div class="card text-white bg-success"><div class="card-body"><h5>Patients</h5><h2>{{ total_patients }}</h2></div></div></div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card"><div class="card-header"><h5>Today's Appointments</h5></div><div class="card-body">
+            {% if today_appointments %}
+                {% for a in today_appointments %}
+                <div class="mb-2"><strong>{{ a.patient.user.full_name }}</strong> - {{ a.appointment_time.strftime('%H:%M') }} <span class="badge bg-{{ 'success' if a.status == 'Completed' else 'warning' }}">{{ a.status }}</span></div>
+                {% endfor %}
+            {% else %}<p class="text-muted">No appointments today</p>{% endif %}
+        </div></div>
+    </div>
+    <div class="col-md-6">
+        <div class="card"><div class="card-header"><h5>Upcoming</h5></div><div class="card-body">
+            {% if upcoming_appointments %}
+                {% for a in upcoming_appointments[:5] %}
+                <div class="mb-2"><strong>{{ a.patient.user.full_name }}</strong> - {{ a.appointment_date }} at {{ a.appointment_time.strftime('%H:%M') }}</div>
+                {% endfor %}
+            {% else %}<p class="text-muted">No upcoming appointments</p>{% endif %}
+        </div></div>
+    </div>
+</div>
+{% endblock %}

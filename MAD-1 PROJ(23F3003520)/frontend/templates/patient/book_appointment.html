@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Book Appointment</h2>
+<hr>
+<div class="row">
+    <div class="col-md-4"><div class="card mb-4"><div class="card-header bg-primary text-white"><h5>Doctor Info</h5></div><div class="card-body">
+        <h5>Dr. {{ doctor.user.full_name }}</h5>
+        <p><strong>Dept:</strong> {{ doctor.department.name }}</p>
+        <p><strong>Spec:</strong> {{ doctor.specialization }}</p>
+        <p><strong>Exp:</strong> {{ doctor.experience_years }} years</p>
+        <p><strong>Fee:</strong> ₹{{ doctor.consultation_fee }}</p>
+    </div></div>
+    <div class="card"><div class="card-header bg-success text-white"><h5>Available Slots</h5></div><div class="card-body">
+        {% if availability %}
+            {% for a in availability %}<div class="mb-2"><strong>{{ a.date.strftime('%A, %B %d') }}</strong><br><small>{{ a.start_time.strftime('%H:%M') }} - {{ a.end_time.strftime('%H:%M') }}</small></div><hr>{% endfor %}
+        {% else %}<p class="text-muted">No availability</p>{% endif %}
+    </div></div></div>
+    <div class="col-md-8"><div class="card"><div class="card-header"><h5>Appointment Details</h5></div><div class="card-body">
+        {% if availability %}
+        <form method="POST">
+            <div class="mb-3"><label>Date *</label><select class="form-select" name="appointment_date" required><option value="">Choose</option>{% for a in availability %}<option value="{{ a.date.strftime('%Y-%m-%d') }}">{{ a.date.strftime('%A, %B %d, %Y') }}</option>{% endfor %}</select></div>
+            <div class="mb-3"><label>Time *</label><input type="time" class="form-control" name="appointment_time" required><small class="text-muted">Within doctor's hours</small></div>
+            <div class="mb-3"><label>Reason *</label><textarea class="form-control" name="reason" rows="4" required></textarea></div>
+            <button type="submit" class="btn btn-success">Book</button>
+            <a href="{{ url_for('patient_doctors') }}" class="btn btn-secondary">Back</a>
+        </form>
+        {% else %}<div class="alert alert-warning">Doctor hasn't set availability</div><a href="{{ url_for('patient_doctors') }}" class="btn btn-secondary">Back</a>{% endif %}
+    </div></div></div>
+</div>
+{% endblock %}

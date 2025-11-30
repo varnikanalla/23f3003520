@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Appointments</h2>
+<hr>
+<div class="mb-3">
+    <a href="{{ url_for('patient_appointments', status='all') }}" class="btn btn-sm btn-outline-secondary {% if status_filter == 'all' %}active{% endif %}">All</a>
+    <a href="{{ url_for('patient_appointments', status='Booked') }}" class="btn btn-sm btn-outline-warning {% if status_filter == 'Booked' %}active{% endif %}">Booked</a>
+    <a href="{{ url_for('patient_appointments', status='Completed') }}" class="btn btn-sm btn-outline-success {% if status_filter == 'Completed' %}active{% endif %}">Completed</a>
+</div>
+<div class="row">
+    {% for a in appointments %}
+    <div class="col-md-6 mb-3"><div class="card h-100"><div class="card-header bg-{{ 'success' if a.status == 'Completed' else 'warning' if a.status == 'Booked' else 'danger' }} text-white">{{ a.status }} - #{{ a.id }}</div><div class="card-body">
+        <h5>Dr. {{ a.doctor.user.full_name }}</h5>
+        <p><strong>Date:</strong> {{ a.appointment_date }}</p>
+        <p><strong>Time:</strong> {{ a.appointment_time.strftime('%H:%M') }}</p>
+        <p><strong>Reason:</strong> {{ a.reason if a.reason else 'Not specified' }}</p>
+        {% if a.status == 'Booked' %}
+        <form method="POST" action="{{ url_for('cancel_appointment', appointment_id=a.id) }}" onsubmit="return confirm('Cancel?')">
+            <button class="btn btn-danger btn-sm">Cancel</button>
+        </form>
+        {% elif a.status == 'Completed' and a.treatment %}
+        <a href="{{ url_for('treatment_history') }}" class="btn btn-info btn-sm">View Treatment</a>
+        {% endif %}
+    </div></div></div>
+    {% endfor %}
+</div>
+{% if not appointments %}<div class="alert alert-info">No appointments. <a href="{{ url_for('patient_doctors') }}">Book now</a></div>{% endif %}
+{% endblock %}
